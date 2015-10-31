@@ -1,0 +1,17 @@
+Mainloop:
+    gosub Switch
+    gosub Switching
+    If SW_Delay > 0 then
+           For Temp2 = 0 to 3
+               nap 5
+               gosub Meas_Vbat
+               gosub Buzzing
+           next Temp2
+       else
+           For Temp2 = 0 to 1
+               Sleep 5
+               gosub Meas_Vbat
+           next Temp2
+    endif
+    if Debugging = 1 then goto Debugger
+    goto Mainloop

@@ -1,0 +1,18 @@
+'PIC16F876A                _________
+'                [MCLR] ->| MCLR B7 |-> 
+'                  VBAT ->| A0   B6 |-> 
+'                V_load ->| A1   B5 |-> SW2_5V 
+'		                ->| A2   B4 |-> SW1_5V  
+'                       ->| A3   B3 |-> SW2
+'                       ->| A4   B2 |-> SW1  
+'			            <-| A5   B1 |->   
+'			        GND - |      B0 |<- Debugging selector 
+'			       OSC1 - |         | - VDD
+'			       OSC2 - |         | - GND
+'		                <-|C0    C7 |->      
+'                       <-|C1    C6 |-> 
+'                       <-|C2    C5 |-> 
+'			    UART TX <-|C3    C4 |<- UART RX
+'			              |_________|
+'                                   
+'   PortA.4 is Open Drain IO, need external pull-up

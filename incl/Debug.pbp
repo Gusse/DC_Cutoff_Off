@@ -1,0 +1,123 @@
+'----- UART Setup -----
+    DEFINE DEBUG_REG PORTC
+    DEFINE DEBUG_BIT 3              'TX on RC3
+    DEFINE DEBUG_BAUD 9600
+    DEFINE DEBUG_MODE 0
+    DEFINE DEBUGIN_REG PORTC
+    DEFINE DEBUGIN_BIT 4            'RX on RC4
+    DEFINE DEBUGIN_BAUD 9600
+    DEFINE DEBUGIN_MODE 0
+
+Debugger:
+    read 0, adval_3_temp.Highbyte
+    read 1, adval_3_temp.Lowbyte
+    read 2, adval_4.Lowbyte
+    If Dead_SW = 1 then
+            adval_3 = adval_3_temp + adval_5
+        else
+            adval_3 = adval_3_temp
+    endif    
+    DEBUG "Waiting input:",13,10
+    DEBUGIN 2000, Write_UART, [STR ADC_Array\1]
+    FOR CmdIdx = 0 to 2
+        SELECT CASE CmdIdx
+          CASE 0 : ARRAYWRITE CmdString,["1"]  
+          CASE 1 : ARRAYWRITE CmdString,["2"]
+          CASE 2 : ARRAYWRITE CmdString,["3"]  
+        END SELECT
+        ARRAYREAD ADC_Array,4,NoCmd,[WAITSTR CmdString\1]
+        ON CmdIdx GOTO cmd_ADC2, cmd_ADC3, cmd_ADC4 ; found cmd
+      NoCmd:  
+    NEXT CmdIdx
+    goto Bad_Command
+
+cmd_ADC2:
+    dummy = (adval_3_temp * 200)
+    dummy = div32 137
+    debug "ADC2:  ", dec4 adval_3_temp
+    debug "     Volt: ", DEC2 ((adval_3_temp * 2)/137),".", dec1 (adval_3_temp * 20)/137, dec1 dummy,13,10
+    Debug "Anna ADC arvo (1ADC=14.6mV): ",13,10
+    DEBUGIN 10000, Mainloop, [STR ADC_Array\4]
+    adval_3_temp  = ((ADC_Array[0] - 48)*1000) + ((ADC_Array[1] - 48)*100) + ((ADC_Array[2] - 48)*10) + (ADC_Array[3] - 48)
+    write 0, adval_3_temp.Highbyte
+    write 1, adval_3_temp.Lowbyte
+    dummy = (adval_3_temp * 200)
+    dummy = div32 137
+    debug "ADC2:  ", dec4 adval_3_temp
+    debug "     Volt: ", DEC2 ((adval_3_temp * 2)/137),".", dec1 (adval_3_temp * 20)/137, dec1 dummy,13,10
+    debug "---------------------"
+    DEBUG 13,10 
+    Goto Mainloop
+
+cmd_ADC3:
+    dummy = (adval_4 * 200)
+    dummy = div32 137
+    debug "ADC3:  ", dec4 adval_4
+    debug "     Volt: ", DEC2 ((adval_4 * 2)/137),".", dec1 (adval_4 * 20)/137, dec1 dummy,13,10
+    Debug "Anna Delta arvo (1ADC=14.6mV): ",13,10
+    
+    DEBUGIN 10000, Mainloop, [STR ADC_Array\2]
+    adval_4  = ((ADC_Array[0] - 48)*10) + (ADC_Array[1] - 48)
+    write 2, adval_4.Lowbyte
+    dummy = (adval_4 * 200)
+    dummy = div32 137
+    debug "ADC3:  ", dec4 adval_4
+    debug "     Volt: ", DEC2 ((adval_4 * 2)/137),".", dec1 (adval_4 * 20)/137, dec1 dummy,13,10
+    debug "---------------------"
+    DEBUG 13,10 
+    Goto Mainloop
+
+cmd_ADC4:
+    dummy = (adval_5 * 200)
+    dummy = div32 137
+    debug "Hyst:  ", dec4 adval_5
+    debug "     Volt: ", DEC2 ((adval_5 * 2)/137),".", dec1 (adval_5 * 20)/137, dec1 dummy,13,10
+    Debug "Anna Hyst arvo (1ADC=14.6mV): ",13,10
+    
+    DEBUGIN 10000, Mainloop, [STR ADC_Array\2]
+    adval_5  = ((ADC_Array[0] - 48)*10) + (ADC_Array[1] - 48)
+    write 3, adval_5.Lowbyte
+    dummy = (adval_5 * 200)
+    dummy = div32 137
+    debug "Hyst:  ", dec4 adval_5
+    debug "     Volt: ", DEC2 ((adval_5 * 2)/137),".", dec1 (adval_5 * 20)/137, dec1 dummy,13,10
+    debug "---------------------"
+    DEBUG 13,10 
+    Goto Mainloop
+
+Bad_Command:	
+    debug "BAD COMMAND",13,10
+    goto Mainloop
+
+Write_UART:
+    debug 13,10
+    dummy = (adval_1(4) * 200)
+    dummy = div32 137
+    debug "ADC0:  ", dec4 adval_1(4)
+    debug "     Volt: ", DEC2 ((adval_1(4) * 2)/137),".", dec1 (adval_1(4) * 20)/137, dec1 dummy,13,10
+    dummy = (adval_2(4) * 200)
+    dummy = div32 137
+    debug "ADC1:  ", dec4 adval_2(4)
+    debug "     Volt: ", DEC2 ((adval_2(4) * 2)/137),".", dec1 (adval_2(4) * 20)/137, dec1 dummy,13,10
+    dummy = (adval_3 * 200)
+    dummy = div32 137
+    debug "ADC2:  ", dec4 adval_3
+    debug "     Volt: ", DEC2 ((adval_3 * 2)/137),".", dec1 (adval_3 * 20)/137, dec1 dummy,13,10
+    dummy = (adval_4 * 200)
+    dummy = div32 137
+    debug "ADC3:  ", dec4 adval_4
+    debug "     Volt: ", DEC2 ((adval_4 * 2)/137),".", dec1 (adval_4 * 20)/137, dec1 dummy,13,10    
+
+    dummy = (adval_5 * 200)
+    dummy = div32 137
+    debug "Hyst:  ", dec4 adval_5
+    debug "     Volt: ", DEC2 ((adval_5 * 2)/137),".", dec1 (adval_5 * 20)/137, dec1 dummy,13,10    
+
+    dummy = ((adval_1(4) - adval_2(4)) * 200)
+    dummy = div32 137
+    debug "Delta: ", dec4 (adval_1(4) - adval_2(4))
+    debug "     Volt: ", DEC2 (((adval_1(4) - adval_2(4)) * 2)/137),".", dec1 ((adval_1(4) - adval_2(4)) * 20)/137, dec1 dummy,13,10
+    debug "Counter:", bin8 SW_delay,13,10
+    debug "---------------------"
+    DEBUG 13,10      
+    Goto Mainloop

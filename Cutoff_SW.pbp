@@ -1,0 +1,27 @@
+'-------------------------------------------------------------------------------
+' Releohjain veneeseen
+'-------------------------------------------------------------------------------
+' Include & Definition section
+'-------------------------------------------------------------------------------
+    define OSC 10
+    INCLUDE "incl\PIC16F876A_config.pbp"
+
+'----- Basics ---------------------------------
+    INCLUDE "incl\Definitions.pbp"        
+    INCLUDE "incl\Variables.pbp"
+
+'----- Config Setups --------------------------
+    INCLUDE "incl\Config.pbp"
+
+'----- Inits and ADC Definitions --------------
+    INCLUDE "incl\Inits.pbp"
+    INCLUDE "incl\ADCIN.pbp"
+    
+'-------------------------------------------------------------------------------
+' Main program
+'-------------------------------------------------------------------------------
+    INCLUDE "incl\Mainloop.pbp"
+    INCLUDE "incl\Measure.pbp"
+    INCLUDE "incl\Debug.pbp"
+    
+'-------------------------------------------------------------------------------      

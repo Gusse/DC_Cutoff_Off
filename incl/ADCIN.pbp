@@ -1,0 +1,7 @@
+    DEFINE ADC_CLOCK 3      ' ADC clock source  (RC)
+'    DEFINE ADC_CLOCK 6      ' ADC clock source  (FOSC/32)
+'    DEFINE ADC_CLOCK 5      ' ADC clock source  (FOSC/16)
+    DEFINE ADC_BITS  10      ' ADCIN resolution  (Bits)
+    DEFINE ADC_SAMPLEUS 50  ' ADC sampling time (uSec)
+    
+'   FOSC[Hz] / 625000 = ADC_CLOCK nr

@@ -1,0 +1,62 @@
+Meas_Vbat:
+    for Temp = 3 to 1 step -1
+        adval_1(Temp) = adval_1(Temp-1)
+        adval_2(Temp) = adval_2(Temp-1)
+    Next Temp    
+    pause 1
+    adcin 0, adval_1(0)
+    adcin 1, adval_2(0)
+    pause 1
+    if adval_2 > adval_1 then adval_2 = adval_1   
+    adval_1(4) = (adval_1(0) + adval_1(1) + adval_1(2) + adval_1(3))/4
+    adval_2(4) = (adval_2(0) + adval_2(1) + adval_2(2) + adval_2(3))/4
+    ADCON0.0 = 0
+    If Dead_SW = 1 then
+            adval_3 = adval_3_temp + adval_5
+        else
+            adval_3 = adval_3_temp
+    endif   
+    return
+
+Switch:
+    if adval_1(4) > adval_3 then                  
+            Selector = 1
+            Buzzer = 0
+        else
+            Selector = 0
+    endif
+
+    If (adval_1(4) > (adval_2(4) + adval_4)) and Selector = 0 then
+            Buzzer = 1
+        else
+            Buzzer = 0
+    endif
+    return
+        
+Switching:
+    SW_delay = SW_delay << 1
+    SW_delay.0 = Selector   
+
+    If SW_Delay = 255 then
+        High SW1
+        High SW1_5V
+        Buzzer_Delay = 0
+        Dead_SW = 0
+    endif
+
+    If SW_Delay = 0 then
+        Low SW1
+        Low SW2
+        Low SW1_5V
+        Low SW2_5V
+        Buzzer_Delay = 1
+        Dead_SW = 1
+    endif
+    return
+
+Buzzing:    
+    If Buzzer = 1 and Buzzer_Delay = 0 then
+       Toggle SW2
+       Toggle SW2_5V       
+    endif
+    return

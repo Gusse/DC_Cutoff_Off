@@ -1,0 +1,30 @@
+Init:
+    TRISA = %00011111
+    TRISB = %00000001
+    TRISC = %00010000
+    PortA = %00000000
+    PortB = %00000000
+    PortC = %00000000
+    ADCON1 = %10000010		' Set PORTA 0&1&2&3&4=Ana, 5=Dig
+  
+    SW_Delay = 0
+    Buzzer_Delay = 1
+    Selector = 0
+    Dead_SW = 0
+
+    EEPROM 0,[3]
+    EEPROM 1,[132]
+    EEPROM 2,[7]
+    EEPROM 3,[21]
+    read 0, adval_3_temp.Highbyte
+    read 1, adval_3_temp.Lowbyte
+    read 2, adval_4.Lowbyte
+    read 3, adval_5.lowbyte
+    
+    pause 100
+    gosub Meas_Vbat
+    pause 10
+    gosub Meas_Vbat
+    pause 10
+    gosub Meas_Vbat
+    goto Mainloop

@@ -1,0 +1,5 @@
+    SW2_5V          var PortB.5
+    SW1_5V          VAR PortB.4 
+    SW2             VAR PortB.3
+    SW1             VAR PortB.2
+    Debugging       var PortB.0    

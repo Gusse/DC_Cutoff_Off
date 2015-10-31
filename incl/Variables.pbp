@@ -1,0 +1,19 @@
+    adval_1             var word [5]
+    adval_2             var word [5]
+    adval_3             var word
+    adval_3_Temp        var word
+    adval_4             var word
+    adval_5             var word
+    Temp                VAR BYTE
+    Temp2               VAR BYTE
+    
+    Selector            var bit
+    Buzzer              var bit
+    SW_Delay            VAR Byte
+    Buzzer_Delay        var bit
+    Dead_SW             var bit
+    
+    dummy               var word
+    ADC_Array           VAR BYTE [4]
+    CmdIdx              VAR BYTE
+    CmdString           VAR BYTE
